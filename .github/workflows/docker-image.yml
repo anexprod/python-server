@@ -1,0 +1,26 @@
+name: Сборка и загрузка Docker-образа
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Клонирование репозитория
+      uses: actions/checkout@v3
+
+    - name: Логин в Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.anexprod21 }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Сборка Docker-образа
+      run: |
+        docker build -t ${{ secrets.anexprod21 }}/python-server:latest .
+    - name: Загрузка Docker-образа
+      run: |
+        docker push ${{ secrets.anexprod21 }}/python-server:latest
